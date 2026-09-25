@@ -22,7 +22,7 @@ request shape.
 
 | | |
 | --- | --- |
-| **Weights** | [`TODO/janus-4b`](https://huggingface.co/TODO/janus-4b) (Qwen3.5-4B + LoRA r16) and [`TODO/janus-0.8b`](https://huggingface.co/TODO/janus-0.8b) (Qwen3.5-0.8B + LoRA r64) and [`TODO/janus-35b-a3b`](https://huggingface.co/TODO/janus-35b-a3b) (Qwen3.6-35B-A3B + LoRA r16, served on NVIDIA's NVFP4 quantization; needs a 32 GB Blackwell GPU), each with a pointer decision head |
+| **Weights** | [`cmxu/janus-4b`](https://huggingface.co/cmxu/janus-4b) (Qwen3.5-4B + LoRA r16) and [`cmxu/janus-0.8b`](https://huggingface.co/cmxu/janus-0.8b) (Qwen3.5-0.8B + LoRA r64) and [`cmxu/janus-35b-a3b`](https://huggingface.co/cmxu/janus-35b-a3b) (Qwen3.6-35B-A3B + LoRA r16, served on NVIDIA's NVFP4 quantization; needs a 32 GB Blackwell GPU), each with a pointer decision head |
 | **Readout** | The state is encoded once; each question is an isolated branch; a pointer head scores every option in context. Up to 255 options |
 | **Calibration** | Temperatures fitted after training on held-out requests: global, per option count, per task family |
 | **Training** | Synthetic decision families and public datasets converted to typed requests. Janus 0.8B: 57,304 requests including 51-locale MASSIVE, distilled from Janus 35B-A3B. Janus 35B-A3B: 53,224 English requests, one epoch. Janus 4B: 51,996 English requests, gold targets, one epoch |
@@ -55,8 +55,8 @@ that decide most of the official one. On the official board, JevK5 v0.2.0 scores
 
 | set | Janus 0.8B | Janus 4B | Janus 35B-A3B | JevK5 v0.2 | Laya 0.3.11 |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| MASSIVE, 51 locales, 20-way intent | 0.635 / 0.059 | **0.767** / 0.039 | TODO | refused (its limit is 16 options) | 0.272 / 0.173 |
-| XNLI, 15 languages | 0.655 / 0.044 | **0.757** / 0.055 | TODO | 0.608 / 0.165 | 0.522 / 0.051 |
+| MASSIVE, 51 locales, 20-way intent | 0.635 / 0.059 | **0.767** / 0.039 | not measured | refused (its limit is 16 options) | 0.272 / 0.173 |
+| XNLI, 15 languages | 0.655 / 0.044 | **0.757** / 0.055 | not measured | 0.608 / 0.165 | 0.522 / 0.051 |
 
 **Latency.** Median / p90 ms per request, warm, one request at a time, on the final serving code (start-up pre-capture on).
 Every system was served by its own code on the same card. Laya truncates long states to its context (26-35% of
@@ -83,13 +83,13 @@ to 9.9 GB. Janus 35B-A3B on an RTX 5090 (NVFP4 experts; measured 2026-09-21): 22
 Python 3.11+, PyTorch 2.6+. A CUDA GPU is recommended; everything also runs on CPU, more slowly.
 
 ```bash
-pip install "janus @ git+https://github.com/TODO/janus@TODO"
+pip install "janus @ git+https://github.com/IcarusAICo/janus"
 ```
 
 ```python
 import janus
 
-m = janus.load("TODO/janus-4b", device="cuda")  # a Hugging Face repo id or a local directory
+m = janus.load("cmxu/janus-4b", device="cuda")  # a Hugging Face repo id or a local directory
 
 response = m.predict(
     "Refunds need a receipt and a purchase within 30 days. The customer bought 12 days ago and has no receipt.",
@@ -115,7 +115,7 @@ temperature.
 ### Server
 
 ```bash
-hf download TODO/janus-4b --local-dir janus-4b
+hf download cmxu/janus-4b --local-dir janus-4b
 JANUS_SERVER_TOKEN=choose-a-secret python -m janus serve \
   --checkpoint janus-4b/model.pt --calibration janus-4b/calibration.json \
   --model-id janus-4b --device cuda --port 8080
@@ -134,7 +134,7 @@ cross-request batching, and a prefix cache that pays for a repeated state once. 
 ### Docker
 
 ```bash
-docker build -t janus-serve:4b --build-arg MODEL_REPO=TODO/janus-4b --build-arg MODEL_REVISION=TODO .
+docker build -t janus-serve:4b --build-arg MODEL_REPO=cmxu/janus-4b --build-arg MODEL_REVISION=65208bb35f5402686adf6e09c3390b3b16f147ff .
 docker run --rm --gpus all -p 127.0.0.1:8080:8080 janus-serve:4b
 ```
 
@@ -207,13 +207,12 @@ python -m pytest tests -q   # CPU, with a tiny random model
 
 ## License and credits
 
-Code: Apache-2.0 ([LICENSE](LICENSE)). Adapter weights: TODO, pending the training-data licence decision
-([release/DATA-LICENSES.md](release/DATA-LICENSES.md)). The base models
+Code and adapter weights: Apache-2.0 ([LICENSE](LICENSE)). The base models
 [Qwen3.5-4B](https://huggingface.co/Qwen/Qwen3.5-4B) and [Qwen3.5-0.8B](https://huggingface.co/Qwen/Qwen3.5-0.8B),
 and Qwen3.6-35B-A3B (Janus 35B-A3B's base, run as
 [nvidia/Qwen3.6-35B-A3B-NVFP4](https://huggingface.co/nvidia/Qwen3.6-35B-A3B-NVFP4)), are Apache-2.0.
 
-Training data, with thanks to its authors. Each keeps its own licence; the per-source audit is in DATA-LICENSES.md.
+Training data, with thanks to its authors. Each dataset keeps its own licence.
 - [MASSIVE](https://github.com/alexa/massive) (Amazon, CC BY 4.0)
 - [XNLI](https://github.com/facebookresearch/XNLI) (Meta, CC BY-NC 4.0; evaluation only, no released model trained on it)
 - [BANKING77](https://github.com/PolyAI-LDN/task-specific-datasets) (PolyAI, CC BY 4.0)
