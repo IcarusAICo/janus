@@ -1,0 +1,5 @@
+{
+  "model": {"backbone": "tiny", "adaptation": "full", "mode": "listwise", "dtype": "float32", "hidden_size": 64, "layers": 2, "head_rank": 32, "max_tokens": 2048},
+  "device": "cpu", "epochs": 3, "accumulation": 4,
+  "backbone_lr": 0.003, "head_lr": 0.003, "eval_every": 8, "seed": 17
+}

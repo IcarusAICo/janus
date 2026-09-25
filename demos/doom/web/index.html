@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jev · Doom</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div id="stage">
+    <section id="viewport">
+      <img id="frame" alt="Doom framebuffer">
+      <div id="scan"></div>
+    </section>
+    <aside id="hud">
+      <header>
+        <p class="brand">JEV // SYSTEM ONE</p>
+        <h1>Doom</h1>
+        <p class="latency" id="latency">— ms</p>
+      </header>
+      <section>
+        <h2>Orders</h2>
+        <form id="orders-form">
+          <textarea id="orders" rows="3" spellcheck="false"></textarea>
+          <button type="submit">Commit orders</button>
+        </form>
+      </section>
+      <section id="objective-row">
+        <div><span>Director</span><strong id="director">0 / 0</strong></div>
+        <div><span>Kills</span><strong id="kills">0</strong></div>
+        <div><span>Health</span><strong id="health">0</strong></div>
+        <div><span>Ammo</span><strong id="ammo">0</strong></div>
+      </section>
+      <p class="caption" id="objective"></p>
+      <section>
+        <h2>Map</h2>
+        <svg id="minimap" viewBox="0 0 200 120"></svg>
+      </section>
+      <section>
+        <h2>Judgments</h2>
+        <div id="prompts"></div>
+      </section>
+      <section>
+        <h2>State</h2>
+        <p class="hint">This is the JSON/YAML Jev receives. Edit and apply without restarting.</p>
+        <div class="state-tools">
+          <button type="button" id="schema-json">JSON</button>
+          <button type="button" id="schema-yaml">YAML</button>
+          <button type="button" id="apply-state">Apply state</button>
+          <button type="button" id="clear-override">Clear override</button>
+        </div>
+        <textarea id="state" rows="12" spellcheck="false"></textarea>
+      </section>
+    </aside>
+  </div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

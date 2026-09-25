@@ -1,0 +1,19 @@
+{
+  "state": "My bank transfer failed three times, but the money has left my account.",
+  "questions": {
+    "route": {
+      "type": "choice",
+      "instructions": "Which team should handle this message?",
+      "criteria": {"payments": "Payment and transfer problems", "access": "Login and access problems", "other": "Anything else"}
+    },
+    "transfer_problem": {
+      "type": "noul",
+      "instructions": "Does the message report a problem with a bank transfer?"
+    },
+    "frustration": {
+      "type": "score",
+      "instructions": "How frustrated does the customer sound?",
+      "criteria": ["calm", "concerned", "very frustrated"]
+    }
+  }
+}

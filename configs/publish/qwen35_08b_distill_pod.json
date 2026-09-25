@@ -1,0 +1,33 @@
+{
+  "model": {
+    "backbone": "Qwen/Qwen3.5-0.8B",
+    "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+    "backbone_family": "qwen3_5",
+    "adaptation": "lora",
+    "mode": "tree",
+    "tree_positions": "continue",
+    "directionality": "causal",
+    "dtype": "bfloat16",
+    "head_rank": 128,
+    "lora_rank": 64,
+    "max_tokens": 9216,
+    "attention": "sdpa",
+    "gradient_checkpointing": true,
+    "batch_states": 32
+  },
+  "device": "cuda:0",
+  "epochs": 1,
+  "accumulation": 32,
+  "seed": 17,
+  "backbone_lr": 0.0002,
+  "head_lr": 0.001,
+  "eval_every": 300,
+  "warmup_steps": 50,
+  "cosine_decay": true,
+  "max_seconds": 43200,
+  "selection": "dev_nll_plus_heldout",
+  "heldout_dev": "data/phase1-v1/dev_post_unseen.jsonl",
+  "heldout_weight": 1.0,
+  "consistency_weight": 0.1,
+  "group_tokens": 24000
+}

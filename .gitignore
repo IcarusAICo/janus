@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+.cache/
+runs/
+data/
+*.pt
+*.safetensors
+env.sh
+.env

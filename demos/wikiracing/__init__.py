@@ -1,0 +1,1 @@
+"""Wikiracing demo package."""

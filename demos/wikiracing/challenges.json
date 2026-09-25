@@ -1,0 +1,17 @@
+{
+  "baseball-sun": {
+    "start": "Baseball",
+    "target": "Sun",
+    "max_hops": 25
+  },
+  "rubber-duck-a": {
+    "start": "Rubber duck",
+    "target": "Black hole",
+    "max_hops": 25
+  },
+  "rubber-duck-b": {
+    "start": "Rubber duck",
+    "target": "French Revolution",
+    "max_hops": 25
+  }
+}

@@ -1,0 +1,68 @@
+{
+ "state": "{\"weapons\": {\"fist\": {\"attack_type\": \"melee\", \"effective_range\": \"contact\", \"one_liner\": \"last resort\"}, \"pistol\": {\"attack_type\": \"hitscan\", \"ammo_type\": \"bullets\", \"effective_range\": \"medium\", \"one_liner\": \"weak and inaccurate\"}, \"shotgun\": {\"attack_type\": \"hitscan\", \"ammo_type\": \"shells\", \"max_ammo\": 50, \"spread_deg\": \"±5.6\", \"effective_range\": \"under 500\", \"one_liner\": \"devastating up close, pellets scatter with distance\"}, \"super shotgun\": {\"attack_type\": \"hitscan\", \"ammo_type\": \"shells\", \"max_ammo\": 50, \"effective_range\": \"under 300\", \"one_liner\": \"point blank annihilation, slow reload\"}, \"chaingun\": {\"attack_type\": \"hitscan\", \"ammo_type\": \"bullets\", \"one_liner\": \"sustained fire, walks the spray\"}, \"rocket launcher\": {\"attack_type\": \"projectile\", \"ammo_type\": \"rockets\", \"one_liner\": \"splash kills you too\"}, \"plasma rifle\": {\"attack_type\": \"projectile\", \"ammo_type\": \"cells\", \"one_liner\": \"fast bolts, melts at mid range\"}}, \"enemy_types\": {\"zombieman\": \"slow hitscan; dies in one shotgun blast\", \"shotgun zombie\": \"hitscan pellets; more dangerous than a zombieman\", \"imp\": \"fires fireballs; closes if you linger\", \"demon\": \"melee rusher; keep it off your face\", \"cacodemon\": \"floats and spits; hold range and dodge the ball\", \"lost soul\": \"charges; sidestep\"}, \"player_physics\": {\"max_speed\": \"~292 map units/second\", \"acceleration\": \"reaches max speed in ~1.1 seconds from standstill\"}, \"measurement_context\": {\"distance_unit\": \"Doom map unit; not inches, feet, meters, or miles. The player's body is 32 units wide.\", \"distance_bands\": {\"contact\": \"under 64 map units; immediate melee range\", \"close\": \"64 to under 256; nearby dangerous engagement range\", \"medium\": \"256 to under 768; ranged engagement and meaningful travel distance\", \"far\": \"768 or more; distant and substantial travel required\"}, \"relative_bearing_degrees\": {\"0\": \"straight ahead\", \"positive\": \"left\", \"negative\": \"right\", \"+90\": \"directly left\", \"-90\": \"directly right\", \"+/-180\": \"behind\"}, \"vertical_aim\": \"automatic when the target is in view; only horizontal bearing matters then. A shot stops on the first solid thing in front of the muzzle.\", \"time\": {\"one_game_tick\": \"1/35 second\", \"control_rate\": \"decisions update every ~4 ticks (~0.1 seconds); controls persist between decisions\", \"controls\": \"aiming, movement, and the trigger operate simultaneously\"}}, \"player\": {\"health\": \"40/100\", \"armor\": \"0/200\", \"weapon\": \"shotgun\", \"ammo\": 12, \"status\": null, \"carrying\": [\"fist\", \"pistol (50 bullets)\", \"shotgun (12 shells, in hand)\"], \"keys\": null, \"switching\": null}, \"walls\": {\"ahead\": \"open\", \"left\": \"close\", \"right\": \"open\"}, \"footing\": null, \"velocity\": {\"speed\": \"80 map units/second\", \"direction\": \"-4° (dead ahead)\"}, \"visible\": [{\"labeled\": \"cacodemon A\", \"kind\": \"cacodemon\", \"distance\": \"180 (close)\", \"bearing\": \"-12° (ahead right)\", \"range\": \"close\"}], \"remembered\": [{\"labeled\": \"medikit B (25 health)\", \"kind\": \"medikit\", \"distance\": \"400 (medium)\", \"bearing\": \"+40° (ahead left)\", \"last_seen\": \"just now\", \"status\": \"out of view\"}], \"map\": {\"current_room\": \"Room 3\", \"destinations\": [{\"id\": \"room-3-edge\", \"text\": \"The unexplored edge on the north side of Room 3\"}]}, \"director\": {\"spawned\": 11, \"killed\": 2}, \"standing_orders\": \"hunt hostiles\"}",
+ "questions": {
+  "firing": {
+   "type": "choice",
+   "instructions": "Should the player's trigger be held down right now?",
+   "criteria": {
+    "fire": "Hold the trigger",
+    "hold_fire": "Do not fire"
+   }
+  },
+  "goal": {
+   "type": "choice",
+   "instructions": "Considering 'player', 'enemies', and 'items', what is the player's highest-priority goal right now?",
+   "criteria": {
+    "kill_enemy": "Attack a visible or remembered hostile",
+    "restore_health": "Move toward a medikit, stimpack, or health bonus",
+    "stock_ammo": "Collect ammo or shells",
+    "upgrade_weapon": "Pick up a better weapon",
+    "add_armor": "Collect armor",
+    "scout": "Look for what is out of sight",
+    "advance": "Advance through the level toward an unexplored edge or room",
+    "flee": "Break contact and back off"
+   }
+  },
+  "subject": {
+   "type": "choice",
+   "instructions": "Which actor, item, or landmark should the player focus on?",
+   "criteria": {
+    "cacodemon A": "cacodemon in view, distance 180 (close), bearing -12° (ahead right)",
+    "medikit B": "medikit out of view, distance 400 (medium), bearing +40° (ahead left)",
+    "room-3-edge": "The unexplored edge on the north side of Room 3",
+    "none": "No actor, item, or landmark should be the current focus"
+   }
+  },
+  "movement": {
+   "type": "choice",
+   "instructions": "The player's current top priority is attacking enemies. Given the current situation, how should the player move right now?",
+   "criteria": {
+    "close_in": "Close distance to the focus",
+    "hold_range": "Keep a fighting distance; back off if in contact",
+    "hold_ground": "Do not walk",
+    "walk_to": "Walk toward the focus or landmark",
+    "back_off": "Move away from the focus"
+   }
+  },
+  "dodge": {
+   "type": "choice",
+   "instructions": "The player's current top priority is attacking enemies. What does this exact moment call for?",
+   "criteria": {
+    "carry_on": "No emergency dodge",
+    "dodge_left": "Sidestep left",
+    "dodge_right": "Sidestep right",
+    "dodge_back": "Step back"
+   }
+  },
+  "turn": {
+   "type": "choice",
+   "instructions": "Should the player point right now? Looking and aiming are one act: the gun goes where the eyes go.",
+   "criteria": {
+    "cacodemon A": "cacodemon in view, distance 180 (close), bearing -12° (ahead right)",
+    "medikit B": "medikit out of view, distance 400 (medium), bearing +40° (ahead left)",
+    "room-3-edge": "The unexplored edge on the north side of Room 3",
+    "hold": "Hold current facing"
+   }
+  }
+ }
+}
