@@ -29,7 +29,7 @@ def test_export_load_predict_matches_server(tmp_path, monkeypatch):
                                "by_family": {"fam": {"temperature": .5, "by_cardinality": {"4": 2.}}}}))
     out = tmp_path / "janus-tiny"
     subprocess.run([sys.executable, "-m", "scripts.export_hf", str(ckpt), str(cal), str(out)], check=True)
-    assert {p.name for p in out.iterdir()} == {"model.pt", "calibration.json", "janus_config.json", "README.md"}
+    assert {p.name for p in out.iterdir()} == {"model.pt", "calibration.json", "janus_config.json", "config.json", "README.md"}
     assert (out / "README.md").read_text().startswith("---\nlicense: apache-2.0\nbase_model: tiny\n")
 
     m = janus.load(str(out), device="cpu")

@@ -1,5 +1,6 @@
-"""Write a Hugging Face model repo layout for one checkpoint: model.pt, calibration.json, janus_config.json and a
-model card (README.md) whose results are TODO placeholders to fill in by hand. Uploads nothing.
+"""Write a Hugging Face model repo layout for one checkpoint: model.pt, calibration.json, janus_config.json (also
+written as config.json, the file the Hub counts downloads by) and a model card (README.md) whose results are TODO
+placeholders to fill in by hand. Uploads nothing.
 
     python scripts/export_hf.py CHECKPOINT CALIBRATION OUT_DIR [--model-id NAME] [--repo-id ORG/NAME]
 
@@ -70,6 +71,7 @@ this repo.
 | `model.pt` | trainable tensors only (LoRA + decision head, sha256 `{checkpoint_sha256}`); the backbone is fetched from `{base_model}` at `{base_revision}` |
 | `calibration.json` | global, per-family and per-cardinality temperatures, bound to `model.pt` by its sha256 |
 | `janus_config.json` | model id and base model reference |
+| `config.json` | a copy of `janus_config.json`, so the Hub counts downloads |
 
 Per-family temperatures apply when a request's `group_id` starts with `family:`. Families calibrated in this
 checkpoint: {families}. Every other request uses the global temperature ({temperature:.4f}).
@@ -109,7 +111,8 @@ shutil.copyfile(a.checkpoint, out / "model.pt")
 shutil.copyfile(a.calibration, out / "calibration.json")
 model_id = a.model_id or out.name
 config = {"model_id": model_id, "base_model": model["backbone"], "base_revision": model["revision"], "format": 1}
-(out / "janus_config.json").write_text(json.dumps(config, indent=2) + "\n")
+for name in ("janus_config.json", "config.json"):  # the Hub counts a download per fetch of config.json
+    (out / name).write_text(json.dumps(config, indent=2) + "\n")
 (out / "README.md").write_text(CARD.format(
     model_id=model_id, repo_id=a.repo_id or f"TODO/{model_id}", base_model=model["backbone"],
     base_revision=model["revision"], checkpoint_sha256=file_hash(out / "model.pt"),
